@@ -159,6 +159,13 @@
             color: #666;
             margin-bottom: 5px;
             font-size: 0.9rem;
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+
+        .hobbs-location-address:hover {
+            color: #ff6600;
+            text-decoration: underline;
         }
 
         .hobbs-location-phone {
@@ -635,7 +642,7 @@
                     ${logoSrc ? `<img src="${logoSrc}" alt="${location.name} logo" class="hobbs-location-logo" onerror="this.style.display='none'">` : ''}
                     <div class="hobbs-location-info">
                         <h3>${location.name}</h3>
-                        <div class="hobbs-location-address">${location.address}</div>
+                        <div class="hobbs-location-address" onclick="window.open('${location.googleMapsLink}', '_blank')" title="Click to view on Google Maps">${location.address}</div>
                         ${phone ? `<div class="hobbs-location-phone">${phone}</div>` : ''}
                     </div>
                 </div>
@@ -643,7 +650,6 @@
                 ${badges ? `<div class="hobbs-location-badges">${badges}</div>` : ''}
                 
                 <div class="hobbs-location-actions">
-                    ${location.googleMapsLink ? `<a href="${location.googleMapsLink}" target="_blank" rel="noopener" class="hobbs-btn hobbs-btn-secondary">Google Maps</a>` : ''}
                     ${location.website ? `<a href="${location.website}" target="_blank" rel="noopener" class="hobbs-btn hobbs-btn-secondary">Website</a>` : ''}
                     <button class="hobbs-btn hobbs-btn-primary" onclick="showHobbsOnMap(${location.latitude}, ${location.longitude}, '${location.name.replace(/'/g, "\\'")}')">Show on Map</button>
                 </div>

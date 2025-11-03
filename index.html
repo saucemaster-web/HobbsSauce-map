@@ -180,6 +180,13 @@
             color: #666;
             margin-bottom: 5px;
             font-size: 0.9rem;
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+
+        .location-address:hover {
+            color: #ff6600;
+            text-decoration: underline;
         }
 
         .location-phone {
@@ -713,7 +720,7 @@
                     ${logoSrc ? `<img src="${logoSrc}" alt="${location.name} logo" class="location-logo" onerror="this.style.display='none'">` : ''}
                     <div class="location-info">
                         <h3>${location.name}</h3>
-                        <div class="location-address">${location.address}</div>
+                        <div class="location-address" onclick="window.open('${location.googleMapsLink}', '_blank')" title="Click to view on Google Maps">${location.address}</div>
                         ${phone ? `<div class="location-phone">${phone}</div>` : ''}
                     </div>
                 </div>
@@ -721,7 +728,6 @@
                 ${badges ? `<div class="location-badges">${badges}</div>` : ''}
                 
                 <div class="location-actions">
-                    ${location.googleMapsLink ? `<a href="${location.googleMapsLink}" target="_blank" rel="noopener" class="btn btn-secondary">Google Maps</a>` : ''}
                     ${location.website ? `<a href="${location.website}" target="_blank" rel="noopener" class="btn btn-secondary">Website</a>` : ''}
                     <button class="btn btn-primary" onclick="showOnMap(${location.latitude}, ${location.longitude}, '${location.name.replace(/'/g, "\\'")}')">Show on Map</button>
                 </div>
