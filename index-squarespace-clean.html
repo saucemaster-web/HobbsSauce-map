@@ -15,12 +15,9 @@
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif !important;
             line-height: 1.6;
             color: #333;
-            width: 1200px !important;
-            max-width: 95% !important;
-            margin: 0 auto !important;
+            width: 100% !important;
             padding: 20px !important;
             box-sizing: border-box !important;
-            overflow: hidden !important;
         }
 
         /* Force container constraints */
@@ -388,10 +385,26 @@
                 transform: rotate(360deg);
             }
         }
+        /* Additional wrapper approach */
+        .hobbs-width-wrapper {
+            width: 100% !important;
+            display: flex !important;
+            justify-content: center !important;
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+
+        .hobbs-inner-container {
+            width: 1200px !important;
+            max-width: 95% !important;
+            margin: 0 !important;
+        }
     </style>
 </head>
 <body>
-    <div class="hobbs-map-container">
+    <div class="hobbs-width-wrapper">
+        <div class="hobbs-inner-container">
+            <div class="hobbs-map-container">
         <!-- Map Container -->
         <div id="hobbs-map" role="application" aria-label="Interactive map showing Hobbs Sauce locations"></div>
         
@@ -428,6 +441,7 @@
         <!-- Location Cards -->
         <div id="hobbs-locations-container">
             <div class="hobbs-loading">Loading locations...</div>
+            </div>
         </div>
     </div>
 
