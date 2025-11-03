@@ -642,14 +642,8 @@
 
         function fitMapToMarkersProper() {
             if (markers.length > 0) {
-                const group = new L.featureGroup(markers);
-                const bounds = group.getBounds();
-                
-                // Fit bounds with constraints to keep it focused on Philadelphia
-                map.fitBounds(bounds, {
-                    padding: [20, 20],
-                    maxZoom: 13 // Prevent zooming out too far
-                });
+                // Force set to Philadelphia center with fixed zoom - don't auto-fit bounds
+                map.setView([39.9526, -75.1652], 12);
             }
         }
 
