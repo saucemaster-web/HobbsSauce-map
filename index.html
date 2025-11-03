@@ -555,39 +555,75 @@
                 marker.bindPopup(popup);
 
                 let popupTimeout;
+                let isPopupOpen = false;
 
-                // Add hover events with delay
+                // Desktop hover behavior
                 marker.on('mouseover', function() {
-                    clearTimeout(popupTimeout);
-                    this.openPopup();
+                    if (!('ontouchstart' in window)) { // Only on non-touch devices
+                        clearTimeout(popupTimeout);
+                        this.openPopup();
+                        isPopupOpen = true;
+                    }
                 });
 
                 marker.on('mouseout', function() {
-                    const self = this;
-                    popupTimeout = setTimeout(function() {
-                        self.closePopup();
-                    }, 300); // 300ms delay before closing
+                    if (!('ontouchstart' in window)) { // Only on non-touch devices
+                        const self = this;
+                        popupTimeout = setTimeout(function() {
+                            self.closePopup();
+                            isPopupOpen = false;
+                        }, 300);
+                    }
                 });
 
-                // Keep popup open when hovering over it
+                // Mobile/touch behavior
+                marker.on('click', function(e) {
+                    if ('ontouchstart' in window) { // Touch devices
+                        e.originalEvent.preventDefault();
+                        e.originalEvent.stopPropagation();
+                        
+                        if (!isPopupOpen) {
+                            // First tap: show popup
+                            this.openPopup();
+                            isPopupOpen = true;
+                        } else {
+                            // Second tap: navigate to Google Maps
+                            if (location.googleMapsLink) {
+                                window.open(location.googleMapsLink, '_blank');
+                            }
+                        }
+                    } else {
+                        // Desktop click: immediate navigation
+                        if (location.googleMapsLink) {
+                            window.open(location.googleMapsLink, '_blank');
+                        }
+                    }
+                });
+
+                // Close popup when clicking elsewhere on touch devices
+                map.on('click', function() {
+                    if ('ontouchstart' in window && isPopupOpen) {
+                        marker.closePopup();
+                        isPopupOpen = false;
+                    }
+                });
+
                 marker.on('popupopen', function() {
                     const popupElement = this.getPopup().getElement();
-                    if (popupElement) {
+                    if (popupElement && !('ontouchstart' in window)) {
                         popupElement.addEventListener('mouseenter', function() {
                             clearTimeout(popupTimeout);
                         });
                         
                         popupElement.addEventListener('mouseleave', function() {
                             marker.closePopup();
+                            isPopupOpen = false;
                         });
                     }
                 });
 
-                // Add click event to navigate to Google Maps
-                marker.on('click', function() {
-                    if (location.googleMapsLink) {
-                        window.open(location.googleMapsLink, '_blank');
-                    }
+                marker.on('popupclose', function() {
+                    isPopupOpen = false;
                 });
 
                 // Add marker to map and array

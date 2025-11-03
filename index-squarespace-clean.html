@@ -490,36 +490,75 @@
                 marker.bindPopup(popup);
 
                 let popupTimeout;
+                let isPopupOpen = false;
 
+                // Desktop hover behavior
                 marker.on('mouseover', function() {
-                    clearTimeout(popupTimeout);
-                    this.openPopup();
+                    if (!('ontouchstart' in window)) { // Only on non-touch devices
+                        clearTimeout(popupTimeout);
+                        this.openPopup();
+                        isPopupOpen = true;
+                    }
                 });
 
                 marker.on('mouseout', function() {
-                    const self = this;
-                    popupTimeout = setTimeout(function() {
-                        self.closePopup();
-                    }, 300);
+                    if (!('ontouchstart' in window)) { // Only on non-touch devices
+                        const self = this;
+                        popupTimeout = setTimeout(function() {
+                            self.closePopup();
+                            isPopupOpen = false;
+                        }, 300);
+                    }
+                });
+
+                // Mobile/touch behavior
+                marker.on('click', function(e) {
+                    if ('ontouchstart' in window) { // Touch devices
+                        e.originalEvent.preventDefault();
+                        e.originalEvent.stopPropagation();
+                        
+                        if (!isPopupOpen) {
+                            // First tap: show popup
+                            this.openPopup();
+                            isPopupOpen = true;
+                        } else {
+                            // Second tap: navigate to Google Maps
+                            if (location.googleMapsLink) {
+                                window.open(location.googleMapsLink, '_blank');
+                            }
+                        }
+                    } else {
+                        // Desktop click: immediate navigation
+                        if (location.googleMapsLink) {
+                            window.open(location.googleMapsLink, '_blank');
+                        }
+                    }
+                });
+
+                // Close popup when clicking elsewhere on touch devices
+                hobbsMap.on('click', function() {
+                    if ('ontouchstart' in window && isPopupOpen) {
+                        marker.closePopup();
+                        isPopupOpen = false;
+                    }
                 });
 
                 marker.on('popupopen', function() {
                     const popupElement = this.getPopup().getElement();
-                    if (popupElement) {
+                    if (popupElement && !('ontouchstart' in window)) {
                         popupElement.addEventListener('mouseenter', function() {
                             clearTimeout(popupTimeout);
                         });
                         
                         popupElement.addEventListener('mouseleave', function() {
                             marker.closePopup();
+                            isPopupOpen = false;
                         });
                     }
                 });
 
-                marker.on('click', function() {
-                    if (location.googleMapsLink) {
-                        window.open(location.googleMapsLink, '_blank');
-                    }
+                marker.on('popupclose', function() {
+                    isPopupOpen = false;
                 });
 
                 marker.addTo(hobbsMap);
