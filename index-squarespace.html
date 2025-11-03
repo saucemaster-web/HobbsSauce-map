@@ -30,14 +30,6 @@
             padding: 20px;
         }
 
-        h1 {
-            text-align: center;
-            color: #ff6600;
-            margin-bottom: 30px;
-            font-size: 2.5rem;
-            font-weight: 700;
-        }
-
         /* Map Styles */
         #map {
             height: 600px;
@@ -324,16 +316,12 @@
                 padding: 15px;
             }
 
-            h1 {
-                font-size: 2rem;
-            }
-
             #map {
                 height: 450px;
             }
 
             .locations-grid {
-                grid-template-columns: 1fr;
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
             }
 
             .filter-buttons {
@@ -412,8 +400,6 @@
 </head>
 <body>
     <div class="container">
-        <h1>Hobbs Sauce Locations</h1>
-        
         <!-- Map Container -->
         <div id="map" role="application" aria-label="Interactive map showing Hobbs Sauce locations"></div>
         
@@ -642,8 +628,15 @@
 
         function fitMapToMarkersProper() {
             if (markers.length > 0) {
-                // Force set to Philadelphia center with fixed zoom - don't auto-fit bounds
-                map.setView([39.9526, -75.1652], 12);
+                const group = new L.featureGroup(markers);
+                const bounds = group.getBounds();
+                
+                // Auto-fit bounds but with reasonable constraints
+                map.fitBounds(bounds, {
+                    padding: [20, 20],
+                    maxZoom: 13, // Prevent zooming out too far
+                    minZoom: 10  // Prevent zooming in too close
+                });
             }
         }
 
