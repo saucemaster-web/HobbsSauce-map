@@ -504,8 +504,8 @@
 
         // <!-- ==== MAP SETUP ==== -->
         function initializeMap() {
-            // Initialize the map
-            map = L.map('map').setView([39.9526, -75.1652], 11);
+            // Initialize the map with Philadelphia center and appropriate zoom
+            map = L.map('map').setView([39.9526, -75.1652], 12);
 
             // Add CARTO Voyager tile layer
             L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
@@ -517,8 +517,8 @@
             // Add markers for all locations
             addMarkersToMap();
 
-            // Fit map to show all markers
-            fitMapToMarkers();
+            // Fit map to show all markers with proper bounds
+            fitMapToMarkersProper();
         }
 
         function addMarkersToMap() {
@@ -652,11 +652,21 @@
             return content;
         }
 
-        function fitMapToMarkers() {
+        function fitMapToMarkersProper() {
             if (markers.length > 0) {
                 const group = new L.featureGroup(markers);
-                map.fitBounds(group.getBounds().pad(0.1));
+                const bounds = group.getBounds();
+                
+                // Fit bounds with constraints to keep it focused on Philadelphia
+                map.fitBounds(bounds, {
+                    padding: [20, 20],
+                    maxZoom: 13 // Prevent zooming out too far
+                });
             }
+        }
+
+        function fitMapToMarkers() {
+            fitMapToMarkersProper();
         }
 
         function shouldShowLocation(location) {
