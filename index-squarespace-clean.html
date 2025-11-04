@@ -722,7 +722,7 @@
             
             const logoSrc = location.logo ? `https://raw.githubusercontent.com/saucemaster-web/HobbsSauce-map/main/assets/${location.logo}` : '';
             const phone = location.phone || '';
-            const type = location.type ? location.type.toLowerCase() : '';
+            const type = location.type || '';
             
             let badges = '';
             if (type.includes('RetailShake')) {

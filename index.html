@@ -757,7 +757,7 @@
             
             const logoSrc = location.logo ? `assets/${location.logo}` : '';
             const phone = location.phone || '';
-            const type = location.type ? location.type.toLowerCase() : '';
+            const type = location.type || '';
             
             // Determine badges
             let badges = '';
