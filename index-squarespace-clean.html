@@ -681,12 +681,12 @@
         function shouldShowHobbsLocation(location) {
             if (hobbsCurrentFilter === 'all') return true;
             
-            const type = location.type ? location.type.toLowerCase() : '';
+            const type = location.type || '';
             
             if (hobbsCurrentFilter === 'retail') {
-                return type.includes('retail');
+                return type.includes('RetailShake') || type.includes('RetailSauce');
             } else if (hobbsCurrentFilter === 'menu') {
-                return type.includes('menu') && !type.includes('retail');
+                return type.includes('Menu');
             }
             
             return true;

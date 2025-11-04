@@ -716,12 +716,12 @@
         function shouldShowLocation(location) {
             if (currentFilter === 'all') return true;
             
-            const type = location.type ? location.type.toLowerCase() : '';
+            const type = location.type || '';
             
             if (currentFilter === 'retail') {
-                return type.includes('retail');
+                return type.includes('RetailShake') || type.includes('RetailSauce');
             } else if (currentFilter === 'menu') {
-                return type.includes('menu') && !type.includes('retail');
+                return type.includes('Menu');
             }
             
             return true;
