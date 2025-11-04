@@ -689,6 +689,9 @@
                 return;
             }
 
+            // Sort locations alphabetically by name
+            filteredLocations.sort((a, b) => a.name.localeCompare(b.name));
+
             const grid = document.createElement('div');
             grid.className = 'hobbs-locations-grid';
             

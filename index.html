@@ -724,6 +724,9 @@
                 return;
             }
 
+            // Sort locations alphabetically by name
+            filteredLocations.sort((a, b) => a.name.localeCompare(b.name));
+
             const grid = document.createElement('div');
             grid.className = 'locations-grid';
             
@@ -820,6 +823,21 @@
         document.addEventListener('DOMContentLoaded', function() {
             setupFilters();
             loadLocations();
+            
+            // Send height to parent for iframe auto-sizing
+            function reportHeight() {
+                if (window.parent !== window) {
+                    const height = Math.max(
+                        document.body.scrollHeight,
+                        document.documentElement.scrollHeight
+                    );
+                    window.parent.postMessage({height: height}, '*');
+                }
+            }
+            
+            // Report height after content loads and on resize
+            setTimeout(reportHeight, 1000);
+            window.addEventListener('resize', reportHeight);
         });
     </script>
 </body>
