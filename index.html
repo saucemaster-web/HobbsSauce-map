@@ -647,12 +647,12 @@
         }
 
         function getMarkerIcon(type) {
-            // Check if location has both retail and menu
-            if (type && type.toLowerCase().includes('retail') && type.toLowerCase().includes('menu')) {
+            // Check if location has retail products (Shake or Sauce) and menu
+            if (type && (type.includes('RetailShake') || type.includes('RetailSauce')) && type.includes('Menu')) {
                 return 'assets/hobbs-black.png'; // Both = black
             }
-            // Check if location has only retail
-            else if (type && type.toLowerCase().includes('retail')) {
+            // Check if location has only retail products
+            else if (type && (type.includes('RetailShake') || type.includes('RetailSauce'))) {
                 return 'assets/hobbs-black.png'; // Retail = black
             }
             // Default to menu (orange)

@@ -620,10 +620,10 @@
         }
 
         function getHobbsMarkerIcon(type) {
-            if (type && type.toLowerCase().includes('retail') && type.toLowerCase().includes('menu')) {
+            if (type && (type.includes('RetailShake') || type.includes('RetailSauce')) && type.includes('Menu')) {
                 return 'https://raw.githubusercontent.com/saucemaster-web/HobbsSauce-map/main/assets/hobbs-black.png';
             }
-            else if (type && type.toLowerCase().includes('retail')) {
+            else if (type && (type.includes('RetailShake') || type.includes('RetailSauce'))) {
                 return 'https://raw.githubusercontent.com/saucemaster-web/HobbsSauce-map/main/assets/hobbs-black.png';
             }
             else {
