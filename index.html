@@ -500,7 +500,7 @@
         // <!-- ==== MAP SETUP ==== -->
         function initializeMap() {
             // Initialize the map with Philadelphia center and appropriate zoom
-            map = L.map('map').setView([39.9526, -75.1652], 12);
+            map = L.map('map').setView([39.9526, -75.1652], 11);
 
             // Add CARTO Voyager tile layer
             L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
@@ -690,9 +690,9 @@
                 
                 // Auto-fit bounds but with reasonable constraints
                 map.fitBounds(bounds, {
-                    padding: [20, 20],
-                    maxZoom: 13, // Prevent zooming out too far
-                    minZoom: 10  // Prevent zooming in too close
+                    padding: [30, 30],
+                    maxZoom: 12, // Allow zooming out more to see all locations
+                    minZoom: 9   // Allow zooming out further if needed
                 });
             }
         }
