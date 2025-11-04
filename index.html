@@ -222,6 +222,18 @@
             border: 1px solid rgba(255, 102, 0, 0.4);
         }
 
+        .badge-shake {
+            background: rgba(255, 102, 0, 0.2);
+            color: #d64500;
+            border: 1px solid rgba(255, 102, 0, 0.5);
+        }
+
+        .badge-sauce {
+            background: rgba(255, 102, 0, 0.1);
+            color: #ff6600;
+            border: 1px solid rgba(255, 102, 0, 0.3);
+        }
+
         .location-actions {
             display: flex;
             gap: 10px;
@@ -749,10 +761,13 @@
             
             // Determine badges
             let badges = '';
-            if (type.includes('retail')) {
-                badges += '<span class="badge badge-retail">Hobbs Sauce – Retail</span>';
+            if (type.includes('RetailShake')) {
+                badges += '<span class="badge badge-shake">Hobbs Shake – Retail</span>';
             }
-            if (type.includes('menu')) {
+            if (type.includes('RetailSauce')) {
+                badges += '<span class="badge badge-sauce">Hobbs Sauce – Retail</span>';
+            }
+            if (type.includes('Menu')) {
                 badges += '<span class="badge badge-menu">Hobbs Sauce – On the Menu</span>';
             }
             
