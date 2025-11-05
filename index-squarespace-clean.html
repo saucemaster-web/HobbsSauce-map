@@ -360,6 +360,11 @@
             .hobbs-filter-btn {
                 flex: 1;
                 min-width: 0;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                padding: 10px 8px;
+                font-size: 13px;
             }
 
             .hobbs-legend-items {
@@ -379,6 +384,26 @@
 
             .hobbs-location-actions {
                 justify-content: center;
+            }
+
+            .hobbs-filter-btn {
+                font-size: 12px;
+                padding: 8px 6px;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .hobbs-filter-buttons {
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .hobbs-filter-btn {
+                flex: none;
+                white-space: normal;
+                text-align: center;
+                padding: 10px 15px;
+                font-size: 14px;
             }
         }
 
