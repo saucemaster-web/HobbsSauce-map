@@ -518,6 +518,33 @@
         let locations = [];
         let currentFilter = 'all';
 
+        // Iframe safety helpers
+        const isInIframe = (function() {
+            try {
+                return window.self !== window.top;
+            } catch (e) {
+                return true; // cross-origin frame
+            }
+        })();
+
+        function safePostMessage(message) {
+            try {
+                if (isInIframe && window.parent && typeof window.parent.postMessage === 'function') {
+                    window.parent.postMessage(message, '*');
+                }
+            } catch (e) {
+                // swallow errors to avoid breaking embed
+                console.warn('safePostMessage failed', e);
+            }
+        }
+
+        // Global error forwarding (helpful when embedded)
+        window.addEventListener('error', function(e) {
+            try {
+                safePostMessage({ type: 'embed-error', message: e.message, filename: e.filename, lineno: e.lineno });
+            } catch (_) {}
+        });
+
         // <!-- ==== DATA PARSE ==== -->
         function loadLocations() {
             Papa.parse('data/hobbs_locations.csv', {
@@ -865,25 +892,34 @@
             });
         }
 
-        // Initialize everything when page loads
+        // Initialize everything when page loads (guarded for embeds)
         document.addEventListener('DOMContentLoaded', function() {
-            setupFilters();
-            loadLocations();
-            
-            // Send height to parent for iframe auto-sizing
-            function reportHeight() {
-                if (window.parent !== window) {
-                    const height = Math.max(
-                        document.body.scrollHeight,
-                        document.documentElement.scrollHeight
-                    );
-                    window.parent.postMessage({height: height}, '*');
+            try {
+                setupFilters();
+                loadLocations();
+
+                // Send height to parent for iframe auto-sizing
+                function reportHeight() {
+                    try {
+                        if (window.parent !== window) {
+                            const height = Math.max(
+                                document.body.scrollHeight,
+                                document.documentElement.scrollHeight
+                            );
+                            safePostMessage({ type: 'height', height: height });
+                        }
+                    } catch (e) {
+                        // ignore
+                    }
                 }
+
+                // Report height after content loads and on resize
+                setTimeout(reportHeight, 1000);
+                window.addEventListener('resize', reportHeight);
+            } catch (err) {
+                console.error('Initialization failed:', err);
+                safePostMessage({ type: 'init-failed', error: String(err) });
             }
-            
-            // Report height after content loads and on resize
-            setTimeout(reportHeight, 1000);
-            window.addEventListener('resize', reportHeight);
         });
     </script>
 </body>
