@@ -4,12 +4,34 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hobbs Sauce Locations - Interactive Map</title>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data: https://unpkg.com https://*.cartocdn.com; style-src 'self' 'unsafe-inline' https://unpkg.com; script-src 'self' 'unsafe-inline' https://unpkg.com;">
     
     <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
           integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
           crossorigin=""/>
     
+    <script>
+    // Hobbs locations data embedded from `data/hobbs_locations.csv`
+    // Last updated: 11/3/2025. Add new locations directly to this array.
+    const hobbsLocations = [
+      {name:"Bottle Bar East",type:"RetailShake,RetailSauce,Menu",address:"1308 Frankford Ave, Philadelphia, PA 19125",googleMapsLink:"https://maps.app.goo.gl/4VKgCGjFyxcTPMoN6",website:"https://bottlebareast.com",phone:"+1 267-909-8867",latitude:39.96560624,longitude:-75.14223115,neighborhood:"Fishtown",logo:"BottleBarEastLogo.webp",lastUpdated:"11/3/2025"},
+      {name:"Bishop's Collar",type:"Menu",address:"2349 Fairmount Ave, Philadelphia, PA 19130",googleMapsLink:"https://maps.app.goo.gl/ywPeziYx9iL6jr2K6",website:"https://thebishopscollar.com/",phone:"+1 215-765-1616",latitude:39.96773515,longitude:-75.1769144,neighborhood:"Fairmount",logo:"TheBishopsCollarLogo.png",lastUpdated:"11/3/2025"},
+      {name:"Good Dog Bar",type:"Menu",address:"224 S 15th St, Philadelphia, PA 19102",googleMapsLink:"https://maps.app.goo.gl/KtRQbUPAzkpvXWSSA",website:"http://www.gooddogbar.com/",phone:"+1 215-985-9600",latitude:39.94886733,longitude:-75.16623194,neighborhood:"Center City",logo:"GoodDogLogo.jpg",lastUpdated:"11/3/2025"},
+      {name:"Herman's Coffee",type:"RetailSauce",address:"1313 S 3rd St, Philadelphia, PA 19147",googleMapsLink:"https://maps.app.goo.gl/NuxU2rAXhTVnfBTs6",website:"https://www.hermanscoffee.com/",phone:"",latitude:39.9315074,longitude:-75.14980258,neighborhood:"Pennsport",logo:"HermansCoffeeLogo.jpg",lastUpdated:"11/3/2025"},
+      {name:"Jose Pistola's",type:"Menu",address:"263 S 15th St, Philadelphia, PA 19102",googleMapsLink:"https://maps.app.goo.gl/tuAmpmUmfrfiGc8SA",website:"https://www.pistolaslife.com/",phone:"+1 215-545-4101",latitude:39.94785077,longitude:-75.16624103,neighborhood:"Center City",logo:"JosePistolasLogo.avif",lastUpdated:"11/3/2025"},
+      {name:"Lucky's Last Chance Manayunk",type:"RetailSauce,Menu",address:"848 S 2nd St Ste F, Philadelphia, PA 19147",googleMapsLink:"https://maps.app.goo.gl/4N7MRdopPSXQKAHq9",website:"https://luckyslastchance.com/",phone:"+1 267-519-2080",latitude:40.02663928,longitude:-75.22560202,neighborhood:"Manayunk",logo:"LuckysLastChanceLogo.png",lastUpdated:"11/3/2025"},
+      {name:"Liberty Kitchen PHL",type:"RetailShake,RetailSauce,Menu",address:"1400 N Front St, Philadelphia, PA 19122",googleMapsLink:"https://maps.app.goo.gl/ZfdNh6ZB58KJgmB89",website:"https://www.libertykitchenphl.com/",phone:"+1 215-309-2241",latitude:39.9720826,longitude:-75.13541017,neighborhood:"Fishtown",logo:"LibertyKitchenLogo.webp",lastUpdated:"11/3/2025"},
+      {name:"Palm Tree Market",type:"RetailShake,RetailSauce",address:"717 N 2nd St Frnt, Philadelphia, PA 19123",googleMapsLink:"https://maps.app.goo.gl/DkPvRKnqfV1Dqy5s7",website:"https://palmtreegourmet.com/",phone:"+1 215-925-4707",latitude:39.96241722,longitude:-75.14070029,neighborhood:"Northern Liberties",logo:"PalmTreeMarketLogo.jpg",lastUpdated:"11/3/2025"},
+      {name:"Riverwards Produce Market - Fishtown",type:"RetailShake,RetailSauce",address:"2200 E Norris St, Philadelphia, PA 19125",googleMapsLink:"https://maps.app.goo.gl/QsmTjLE5WZq3XokV7",website:"https://www.riverwardsproduce.com/",phone:"+1 215-678-4304",latitude:39.97831851,longitude:-75.12990662,neighborhood:"Fishtown",logo:"RiverwardsProduceLogo.webp",lastUpdated:"11/3/2025"},
+      {name:"Riverwards Produce Market - Old City",type:"RetailShake,RetailSauce",address:"146 N Bread St, Philadelphia, PA 19106",googleMapsLink:"https://maps.app.goo.gl/6F6UQ1jLmjdJQoNEA",website:"https://www.riverwardsproduce.com/",phone:"+1 215-592-4650",latitude:39.95369256,longitude:-75.14400523,neighborhood:"Old City",logo:"RiverwardsProduceLogo.webp",lastUpdated:"11/3/2025"},
+      {name:"Sancho Pistola's",type:"Menu",address:"19 W Girard Ave, Philadelphia, PA 19123",googleMapsLink:"https://maps.app.goo.gl/oRauU3c1D1k8b4mUA",website:"https://www.pistolaslife.com/",phone:"+1 267-324-3530",latitude:39.9690229,longitude:-75.1352529,neighborhood:"Fishtown",logo:"SanchoPistolasLogo.png",lastUpdated:"11/3/2025"},
+      {name:"Yards Brewing Company",type:"RetailShake,RetailSauce,Menu",address:"500 Spring Garden St, Philadelphia, PA 19123",googleMapsLink:"https://maps.app.goo.gl/E8a58SYsx3gdmE5b8",website:"https://yardsbrewing.com/",phone:"+1 215-634-2600",latitude:39.96106058,longitude:-75.1469083,neighborhood:"Northern Liberties",logo:"YardsBrewingLogo.jpg",lastUpdated:"11/3/2025"},
+      {name:"Pistola's Del Sur",type:"Menu",address:"1934 E Passyunk Ave, Philadelphia, PA 19148",googleMapsLink:"https://maps.app.goo.gl/oJ1wcW9wZZbFGMkk7",website:"https://www.pistolaslife.com/",phone:"+1 267-519-2329",latitude:39.9258992,longitude:-75.168405,neighborhood:"East Passyunk",logo:"PistolasDelSur.png",lastUpdated:"11/3/2025"},
+      {name:"Standard Tap",type:"Menu",address:"901 N 2nd St, Philadelphia, PA 19123",googleMapsLink:"https://maps.app.goo.gl/6e9rRvM3BEnzZgpV7",website:"http://www.standardtap.com/",phone:"+1 215 238-0630",latitude:39.96431983828253,longitude:-75.14054265767028,neighborhood:"Northern Liberties",logo:"standardtaplogo.webp",lastUpdated:"11/3/2025"},
+      {name:"Pennsylvania General Store - Ridge Hall (Ambler)",type:"RetailSauce,RetailShake",address:"15 S Ridge Ave, Ambler, PA 19002",googleMapsLink:"https://maps.app.goo.gl/218Le9bjeSd6ED9x7",website:"https://pageneralstore.com/",phone:"",latitude:40.15422030132327,longitude:-75.2208998,neighborhood:"Ambler",logo:"PennsylvaniaGeneralStore.avif",lastUpdated:"11/3/2025"}
+    ];
+    </script>
     <style>
         * {
             margin: 0;
@@ -508,8 +530,7 @@
             integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
             crossorigin=""></script>
     
-    <!-- PapaParse JavaScript -->
-    <script src="https://unpkg.com/papaparse@5.4.1/papaparse.min.js"></script>
+    
 
     <script>
         // Global variables
@@ -547,24 +568,13 @@
 
         // <!-- ==== DATA PARSE ==== -->
         function loadLocations() {
-            Papa.parse('data/hobbs_locations.csv', {
-                download: true,
-                header: true,
-                complete: function(results) {
-                    locations = results.data.filter(location => 
-                        location.name && location.latitude && location.longitude
-                    );
-                    
-                    // Initialize map after data is loaded
-                    initializeMap();
-                    renderLocationCards();
-                },
-                error: function(error) {
-                    console.error('Error loading CSV:', error);
-                    document.getElementById('locations-container').innerHTML = 
-                        '<div class="loading">Error loading locations. Please refresh the page.</div>';
-                }
-            });
+            // Use embedded hobbsLocations data
+            locations = hobbsLocations.filter(location => 
+                location.name && location.latitude && location.longitude
+            );
+            // Initialize map after data is loaded
+            initializeMap();
+            renderLocationCards();
         }
 
         // <!-- ==== MAP SETUP ==== -->
