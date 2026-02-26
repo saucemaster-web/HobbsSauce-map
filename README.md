@@ -36,15 +36,15 @@ An interactive map showcasing Hobbs Sauce locations across Philadelphia, featuri
 ### Frontend Stack
 - **Vanilla JavaScript** - No framework dependencies
 - **Leaflet.js v1.9.4** - Interactive mapping
-- **PapaParse v5.4.1** - CSV data parsing
 - **CSS Grid & Flexbox** - Responsive layouts
 - **Progressive Enhancement** - Works without JavaScript
 
 ### Data Management
-- **CSV-based** location storage (`data/hobbs_locations.csv`)
-- **GitHub Pages** hosting with automatic updates
-- **Version control** through Git for all changes
-- **Structured data** with validation and consistency
+- **Embedded data** in `index.html` (`const hobbsLocations = [...]`) to avoid cross-origin CSV fetches.
+- Original source: `data/hobbs_locations.csv` (for reference and updates).
+- **GitHub Pages** hosting with automatic updates.
+- **Version control** through Git for all changes.
+- **Structured data** with validation and consistency.
 
 ### Mobile Optimization
 - **Touch-first design** with hover fallbacks
@@ -77,19 +77,23 @@ HobbsSauceMapv2/
 
 ### Local Development
 1. **Clone the repository**
-   ```bash
+   ```pwsh
    git clone https://github.com/saucemaster-web/HobbsSauce-map.git
    cd HobbsSauce-map
    ```
 
 2. **Open in browser**
-   - Direct file access: Open `index.html` in browser
-   - Local server: `python -m http.server 8000` or similar
+   - Direct file access: open `index.html`
+   - Local server (recommended):
+     ```pwsh
+     python -m http.server 8080
+     ```
 
 3. **Make changes**
-   - Edit CSV data in `data/hobbs_locations.csv`
-   - Modify styling in the `<style>` sections
-   - Update JavaScript functionality as needed
+   - Add or edit locations directly in `index.html` inside `hobbsLocations`.
+   - Keep `lastUpdated` current for each entry.
+   - Optionally mirror changes in `data/hobbs_locations.csv` for history.
+   - Modify styling in the `<style>` section as needed.
 
 ### Deployment
 ```bash
@@ -101,7 +105,7 @@ Changes go live automatically via GitHub Pages (1-5 minute delay).
 
 ## 📊 Data Format
 
-### CSV Structure
+### CSV Structure (reference)
 ```csv
 name,type,address,googleMapsLink,website,phone,latitude,longitude,neighborhood,logo,lastUpdated
 ```
@@ -111,9 +115,14 @@ name,type,address,googleMapsLink,website,phone,latitude,longitude,neighborhood,l
 - **RetailSauce**: Hobbs Sauce retail availability
 - **Menu**: Restaurant partnership (in food or bottles with meals)
 
-### Example Entry
+### Example Entry (CSV)
 ```csv
 "Bottle Bar East","RetailShake,RetailSauce,Menu","1308 Frankford Ave, Philadelphia, PA 19125","https://maps.app.goo.gl/4VKgCGjFyxcTPMoN6","https://bottlebareast.com","+1 267-909-8867",39.96560624,-75.14223115,"Fishtown","BottleBarEastLogo.webp","11/3/2025"
+```
+
+### Example Entry (embedded JS)
+```js
+{ name: "Bottle Bar East", type: "RetailShake,RetailSauce,Menu", address: "1308 Frankford Ave, Philadelphia, PA 19125", googleMapsLink: "https://maps.app.goo.gl/4VKgCGjFyxcTPMoN6", website: "https://bottlebareast.com", phone: "+1 267-909-8867", latitude: 39.96560624, longitude: -75.14223115, neighborhood: "Fishtown", logo: "BottleBarEastLogo.webp", lastUpdated: "11/3/2025" }
 ```
 
 ## 🎨 Squarespace Integration
@@ -126,6 +135,18 @@ name,type,address,googleMapsLink,website,phone,latitude,longitude,neighborhood,l
 </iframe>
 ```
 
+### Chrome Local Network Prompt
+- The map no longer fetches external CSV at runtime.
+- Embedded data avoids Chrome's local network prompt heuristic.
+- All external resources are limited to Leaflet (unpkg) and CARTO tiles.
+
+### Content Security Policy
+- `index.html` includes a CSP meta tag restricting sources:
+   ```html
+   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data: https://unpkg.com https://*.cartocdn.com; style-src 'self' 'unsafe-inline' https://unpkg.com; script-src 'self' 'unsafe-inline' https://unpkg.com;">
+   ```
+- Adjust as needed if adding new domains or assets.
+
 ### Auto-Updates
 - **GitHub integration** ensures Squarespace shows latest data
 - **No manual code copying** required after initial setup
@@ -135,10 +156,12 @@ name,type,address,googleMapsLink,website,phone,latitude,longitude,neighborhood,l
 ## 🛠️ Customization
 
 ### Adding New Locations
-1. Edit `data/hobbs_locations.csv`
-2. Include required fields: name, type, address, coordinates
-3. Add business logo to `assets/` folder if available
-4. Commit and push changes
+1. Edit `index.html` and add a new object to `hobbsLocations`.
+2. Include required fields: `name`, `type`, `address`, `latitude`, `longitude`.
+3. Add `logo` file to `assets/` if available.
+4. Keep `lastUpdated` current.
+5. Optionally reflect changes in `data/hobbs_locations.csv`.
+6. Commit and push changes.
 
 ### Styling Updates
 - **CSS variables** for consistent theming
