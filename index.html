@@ -12,6 +12,9 @@
           crossorigin=""/>
     
     <script>
+    // CARTO basemap API key. Raster tiles require one as of 2026 (https://carto.com/basemaps/apikey/).
+    // Paste your key between the quotes. Manage or restrict it at https://dashboard.basemaps.carto.com/
+    const CARTO_API_KEY = 'cb1_4eni_1_0e4422c4a6a164c8eedef556';
     // Hobbs locations data embedded from `data/hobbs_locations.csv`
     // Last updated: 11/3/2025. Add new locations directly to this array.
     const hobbsLocations = [
@@ -585,10 +588,11 @@
             // Initialize the map with Philadelphia center and appropriate zoom
             map = L.map('map').setView([39.9526, -75.1652], 11);
 
-            // Add CARTO Voyager tile layer
-            L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+            // Add CARTO Voyager tile layer (API key appended when CARTO_API_KEY is set)
+            const tileUrl = 'https://basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png'
+                + (CARTO_API_KEY ? '?key=' + encodeURIComponent(CARTO_API_KEY) : '');
+            L.tileLayer(tileUrl, {
                 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-                subdomains: 'abcd',
                 maxZoom: 20
             }).addTo(map);
 
