@@ -175,23 +175,30 @@ name,type,address,googleMapsLink,website,phone,latitude,longitude,neighborhood,l
 - **Map controls** can be enhanced with plugins
 - **Data sources** can be switched from CSV to API
 
-## 🏪 Current Locations (14 Total)
+## 🏪 Current Locations (17 Total)
 
 ### Retail + Restaurant Partners (3)
-- Bottle Bar East - *All products*
-- Liberty Kitchen PHL - *All products*  
+- Lucky's Last Chance Manayunk - *Sauce + menu*
+- Liberty Kitchen PHL - *All products*
 - Yards Brewing Company - *All products*
 
-### Retail Only (5)
-- Palm Tree Market - *Shake & Sauce*
-- Riverwards Produce Market (Fishtown) - *Shake & Sauce*
-- Riverwards Produce Market (Old City) - *Shake & Sauce*
+### Retail Only (6)
 - Herman's Coffee - *Sauce only*
+- Palm Tree Market - *Shake & Sauce*
+- Riverwards Produce Market - Fishtown - *Shake & Sauce*
+- Riverwards Produce Market - Old City - *Shake & Sauce*
+- Pennsylvania General Store - Ridge Hall (Ambler) - *Shake & Sauce*
+- Pennsylvania General Store - Reading Terminal Market - *Shake & Sauce*
 
-### Restaurant Partners (6)
-- Bishop's Collar, Good Dog Bar, Jose Pistola's
-- Sancho Pistola's, Pistola's Del Sur, Standard Tap
-- Lucky's Last Chance Manayunk - *Also sells sauce*
+### Restaurant Partners (8)
+- Bishop's Collar
+- Good Dog Bar
+- Sancho Pistola's
+- Pistola's Del Sur
+- Standard Tap
+- Ortlieb's
+- Druids Keep
+- Ponder
 
 ## 🤝 Contributing
 
